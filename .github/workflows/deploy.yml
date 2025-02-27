@@ -26,7 +26,8 @@ jobs:
           terraform_version: 1.5.0
 
       - name: Authenticate to GCP
-        run: echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" > gcp-infra/service-account.json
+        run: |
+          echo '${{ secrets.SERVICE_ACCOUNT_KEY }}' > gcp-infra/service-account.json
 
       - name: Set project ID
         run: echo "project_id=${{ secrets.GCP_PROJECT_ID }}" >> gcp-infra/terraform.tfvars
