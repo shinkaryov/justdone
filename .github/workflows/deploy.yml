@@ -1,0 +1,33 @@
+name: Deploy Terraform to GCP
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Authenticate to GCP
+        run: echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" > service-account.json
+
+      - name: Set project ID
+        run: echo "project_id=${{ secrets.GCP_PROJECT_ID }}" >> terraform.tfvars
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve

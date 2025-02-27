@@ -1,0 +1,7 @@
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+gcp-infra/service-account.json
+.idea/
+.DS_Store
