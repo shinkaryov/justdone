@@ -2,7 +2,15 @@ name: Deploy Terraform to GCP
 
 on:
   workflow_dispatch:
-
+    inputs:
+      action:
+        description: "Choose action: plan or apply"
+        required: true
+        default: "plan"
+        type: choice
+        options:
+          - "plan"
+          - "apply"
 
 jobs:
   deploy:
@@ -18,16 +26,21 @@ jobs:
           terraform_version: 1.5.0
 
       - name: Authenticate to GCP
-        run: echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" > service-account.json
+        run: echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" > gcp-infra/service-account.json
 
       - name: Set project ID
-        run: echo "project_id=${{ secrets.GCP_PROJECT_ID }}" >> terraform.tfvars
+        run: echo "project_id=${{ secrets.GCP_PROJECT_ID }}" >> gcp-infra/terraform.tfvars
 
       - name: Terraform Init
         run: terraform init
+        working-directory: gcp-infra
 
       - name: Terraform Plan
+        if: github.event.inputs.action == 'plan' || github.event.inputs.action == 'apply'
         run: terraform plan
+        working-directory: gcp-infra
 
       - name: Terraform Apply
+        if: github.event.inputs.action == 'apply'
         run: terraform apply -auto-approve
+        working-directory: gcp-infra
