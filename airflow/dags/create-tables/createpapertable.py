@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS `{DATASET}.{TABLE}` (
     Categories ARRAY<STRING>,
     LinkToTextEng STRING,
     LinkToTextUkr STRING,
+    Source STRING,
     CreatedAt TIMESTAMP
 );
 """
