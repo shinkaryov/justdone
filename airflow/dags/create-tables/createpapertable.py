@@ -7,9 +7,9 @@ TABLE = "paper"
 
 CREATE_TABLE_QUERY = f"""
 CREATE TABLE IF NOT EXISTS `{DATASET}.{TABLE}` (
-    Id STRING,
+    Id STRING NOT NULL,
     Title STRING,
-    Year INT64,
+    PublishedAt TIMESTAMP,
     Authors ARRAY<STRING>,
     ShortDescriptionEng STRING,
     ShortDescriptionUkr STRING,
@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS `{DATASET}.{TABLE}` (
     LinkToTextUkr STRING,
     Source STRING,
     CreatedAt TIMESTAMP
-);
+)
+PARTITION BY DATETIME_TRUNC(PublishedAt, YEAR);
 """
 
 with DAG(
