@@ -116,7 +116,7 @@ class ArxivScraper(Scraper):
                     "Id": paper_id.text,
                     "Source": "arXiv",
                     "Title": title.text,
-                    "ShortDescriptionEng": summary.text,
+                    "ShortDescriptionEng": summary.text.replace("'", '"').strip(),
                     "PublishedAt": published.text,
                     "Authors": authors,
                     "Categories": categories,

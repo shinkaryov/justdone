@@ -95,7 +95,7 @@ class GeminiTranslator(LLMTranslator):
             try:
                 response = await asyncio.to_thread(self.model.generate_content, [prompt])
                 if response and response.text:
-                    return response.text.strip()
+                    return response.text.replace("'", '"').strip()
                 else:
                     print(f"⚠️ Empty response received on attempt {attempt}. Retrying...")
             except google.api_core.exceptions.GoogleAPIError as e:
