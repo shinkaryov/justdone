@@ -45,9 +45,8 @@ BQ_DATASET = "justdone_analytics"
 BQ_TABLE = "paper"
 BQ_CONN_ID = "justdonegcloud"
 
-search_query = Variable.get("TOPIC") if Variable.get("TOPIC") else "all"
-search_results = Variable.get("SEARCH_RESULTS") if Variable.get("SEARCH_RESULTS") else 10
-
+search_query = Variable.get("TOPIC", default="all")
+search_results = Variable.get("SEARCH_RESULTS", default=10)
 
 async def process_papers_and_upload(papers):
     """
@@ -160,8 +159,8 @@ def load_to_bq(**kwargs):
             "Title": paper["Title"].replace("\n", " "),
             "PublishedAt": paper["PublishedAt"],
             "Authors": authors,
-            "ShortDescriptionEng": paper.get("ShortDescriptionEng", "").replace("\n", " "),
-            "ShortDescriptionUkr": paper.get("ShortDescriptionUkr", "").replace("\n", " "),
+            "ShortDescriptionEng": paper.get("ShortDescriptionEng", "").replace("\n", " ") if "ShortDescriptionEng" in paper else "",
+            "ShortDescriptionUkr": paper.get("ShortDescriptionUkr", "").replace("\n", " ") if "ShortDescriptionUkr" in paper else "",
             "Links": links_struct,
             "Categories": categories,
             "LinkToTextEng": paper.get("LinkToTextEng", ""),
@@ -181,7 +180,7 @@ def load_to_bq(**kwargs):
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2024, 3, 1),
+    "start_date": datetime(2025, 3, 1),
     "retries": 1,
     "retry_delay": timedelta(minutes=5),
 }
