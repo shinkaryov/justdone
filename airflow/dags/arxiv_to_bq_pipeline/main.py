@@ -45,8 +45,8 @@ BQ_DATASET = "justdone_analytics"
 BQ_TABLE = "paper"
 BQ_CONN_ID = "justdonegcloud"
 
-search_query = Variable.get("TOPIC", default="all")
-search_results = Variable.get("SEARCH_RESULTS", default=10)
+search_query = Variable.get("TOPIC", default_var="all")
+search_results = Variable.get("SEARCH_RESULTS", default_var=10)
 
 async def process_papers_and_upload(papers):
     """
@@ -159,8 +159,8 @@ def load_to_bq(**kwargs):
             "Title": paper["Title"].replace("\n", " "),
             "PublishedAt": paper["PublishedAt"],
             "Authors": authors,
-            "ShortDescriptionEng": paper.get("ShortDescriptionEng", "").replace("\n", " ") if "ShortDescriptionEng" in paper else "",
-            "ShortDescriptionUkr": paper.get("ShortDescriptionUkr", "").replace("\n", " ") if "ShortDescriptionUkr" in paper else "",
+            "ShortDescriptionEng": paper.get("ShortDescriptionEng", "").replace("\n", " ") if paper["ShortDescriptionEng"] else "",
+            "ShortDescriptionUkr": paper.get("ShortDescriptionUkr", "").replace("\n", " ") if paper["ShortDescriptionUkr"] else "",
             "Links": links_struct,
             "Categories": categories,
             "LinkToTextEng": paper.get("LinkToTextEng", ""),
