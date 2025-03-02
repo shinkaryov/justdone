@@ -9,7 +9,7 @@ This DAG performs the following steps:
 
 Technologies used:
 - **Airflow** for orchestration.
-- **ArXiv API** for paper metadata extraction.
+- **ArXiv API** for paper data extraction.
 - **Google Cloud Storage (GCS)** for storing extracted texts.
 - **Gemini AI** (Vertex AI) for translation.
 - **BigQuery** for structured data storage.
