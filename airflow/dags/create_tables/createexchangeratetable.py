@@ -16,7 +16,7 @@ BigQuery Table Schema:
 - **EffectiveFrom**: Timestamp indicating when the rate becomes effective (TIMESTAMP)
 - **EffectiveTo**: Timestamp indicating when the rate expires (TIMESTAMP)
 
-This table is not partitioned.
+This table is not partitioned. Table is designed as SCD type 2 to handle joins for pipeline idempotence 
 """
 
 from airflow import DAG
