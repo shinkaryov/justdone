@@ -2,7 +2,7 @@
 DAG for Extracting, Processing, and Loading ArXiv Papers into BigQuery
 
 This DAG performs the following steps:
-1. Scrapes ArXiv for the latest machine learning research papers.
+1. Scrapes ArXiv for the latest research papers.
 2. Extracts and processes PDF texts, uploads them to Google Cloud Storage (GCS).
 3. Uses Gemini AI for translation of texts and summaries into Ukrainian.
 4. Loads processed data into a BigQuery table (`justdone_analytics.paper`).
@@ -44,6 +44,9 @@ BUCKET_NAME = f"{GCP_PROJECT_ID}-data-bucket"
 BQ_DATASET = "justdone_analytics"
 BQ_TABLE = "paper"
 BQ_CONN_ID = "justdonegcloud"
+
+search_query = Variable.get("TOPIC") if Variable.get("TOPIC") else "all"
+search_results = Variable.get("SEARCH_RESULTS") if Variable.get("SEARCH_RESULTS") else 10
 
 
 async def process_papers_and_upload(papers):
@@ -107,8 +110,8 @@ def process_papers(**kwargs):
     Args:
         **kwargs: Airflow context variables.
     """
-    scraper = ArxivScraper("http://export.arxiv.org/api/query", "machine learning")
-    papers = scraper.get_papers(3)
+    scraper = ArxivScraper("http://export.arxiv.org/api/query", search_query)
+    papers = scraper.get_papers(int(search_results))
 
     processed_papers = asyncio.run(process_papers_and_upload(papers))
 
